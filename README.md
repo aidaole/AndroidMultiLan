@@ -23,52 +23,73 @@ android中我们适配多语言是在 `values-xxx` 目录中创建对应语言�
 ### 脚本功能主要分为2个部分:
 
 1. `strings.xml` 导出excel: **export_excel.py**
-2. excel 导出对应国家语言列表 `strings.xml`: **import_strings.py**
+2. excel 导出对应国家语言列表 `strings.xml`: **export_xml.py**
 
-### 需要提前安装一些python的package：
+### 环境配置
 
-```
-pip install pandas
-pip install openpyxl
-```
+首先安装python环境, 目前python的版本是3.12.4
 
-### 使用命令
+项目中提供了 `requirements.txt` 文件, 可以方便的安装所有需要的python包
 
-```shell
-python export_excel.py excel地址.xlsx 语言名称 xml地址 语言名称 xml地址 ...
+```bash
+pip install -r requirements.txt
 ```
 
-会将多种语言合并生成到同一个excel文件中
+当然最好是使用 python 虚拟环境 virtualenv 来安装这些包
 
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+在vscode中激活python虚拟环境
 
-![](https://aidaole.github.io/other/images/multi_language/2024-04-06-11-08-16.png ':size=300')
+![](images/README/2024-10-29-21-11-00.png ':size=300')
 
-```shell
-python ./import_strings.py excel地址.xlsx 生成语言存放目录
+### 运行
+
+* 运行程序
+
+```bash
+python ./app.py
 ```
 
-将excel中每一个作为一种语言生成一个xml文件，方便直接导入到项目中
+* 可以看到启动成功日志
 
-![](https://aidaole.github.io/other/images/multi_language/2024-04-06-11-11-38.png ':size=200')
-
-生成的内容
-
-default.xml
-```xml
-<resources>
-    <string name="app_name">EasyPermission</string>
-    <string name="navi_permission">navigation permission</string>
-    <string name="call_permission">call permission</string>
-    <string name="no_tras_sample" translatable="false">not need to translate text</string>
-    <string name="more_text">default more sample</string>
-</resources>
+```bash
+* Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.31.175:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 177-914-879
 ```
 
-zh.xml
-```xml
-<resources>
-    <string name="app_name">EasyPermission</string>
-    <string name="navi_permission">导航权限</string>
-    <string name="call_permission">通话权限</string>
-</resources>
-```
+* 访问网页
+
+![](images/README/2024-10-29-21-25-35.png ':size=300')
+
+### 使用方式
+
+#### 导出excel
+
+1. 导出excel, 填写项目根目录, 会自动读取包括app和modules目录下的所有strings.xml文件, 并导出为excel
+2. 导出时支持填写flavor名称, 默认读取跟`main`同级的flavor目录
+3. 合成时会将main下的`values/strings.xml`(作为默认文件)和flavor目录下的strings.xml文件合并, 并导出为excel
+4. 导出每个module为单独的excel文件
+5. 支持 transable=false 属性, 导出时会过滤对应字符串
+
+
+#### 导出strings.xml
+
+导出xml功能基本就是与excel相反, 会将excel中每一列作为一种单独的语言导出到对应values-xxx/strings.xml文件中
+
+1. 填写项目根目录, 会自动读取包括app和modules目录下的所有strings.xml文件, 并导出为excel
+2. 导出时支持填写flavor名称, 默认读取跟`main`同级的flavor目录
+3. 导出时按照原xml中顺序按key覆盖对应value, 不是以excel中的顺序覆盖, 最大程度上避免git diff出来行对不上的问题
+
+

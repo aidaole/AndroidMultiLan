@@ -1,3 +1,4 @@
-*.xml
 *.xlsx
-.idea/
+*.xml
+*.pyc
+.venv/

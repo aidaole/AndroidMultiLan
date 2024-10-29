@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AndroidMultiLan多语言工具</title>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-right: 5px;
+        }
+
+        .tab.active {
+            border-color: #ddd;
+            border-bottom-color: white;
+            margin-bottom: -1px;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AndroidMultiLan</h1>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('android')">Android</div>
+        <div class="tab" onclick="switchTab('flutter')">Flutter</div>
+    </div>
+
+    <div id="android" class="tab-content active">
+        <div class="section">
+            <h2>导出Excel</h2>
+            <h4>将Android项目中的strings.xml文件导出为Excel文件</h4>
+            <form action="/export_excel" method="post">
+                <div class="form-group">
+                    <label>项目根路径：</label>
+                    <input type="text" name="project_path" placeholder="例如：D:\project" required>
+                    <div class="help-text">项目根目录，包含app目录和modules目录</div>
+                </div>
+                <div class="form-group">
+                    <label>Excel输出目录：</label>
+                    <input type="text" name="output_dir" placeholder="例如：D:\project\output" required>
+                    <div class="help-text">Excel文件将保存在此目录下</div>
+                </div>
+                <div class="form-group">
+                    <label>Flavor名称（可选）：</label>
+                    <input type="text" name="flavor" placeholder="例如：intl">
+                    <div class="help-text">Android项目的flavor名称，留空则不使用flavor</div>
+                </div>
+                <button type="submit">导出Excel</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>导出strings.xml</h2>
+            <h4>将Excel文件中的内容导出为各种语言的strings.xml文件</h4>
+            <form action="/export_xml" method="post">
+                <div class="form-group">
+                    <label>项目根路径：</label>
+                    <input type="text" name="project_path" placeholder="例如：D:\project" required>
+                    <div class="help-text">项目根目录，包含app目录和modules目录</div>
+                </div>
+                <div class="form-group">
+                    <label>Excel文件或目录路径：</label>
+                    <input type="text" name="excel_dir" placeholder="例如：D:\project\output\app.xlsx 或 D:\project\output"
+                        required>
+                    <div class="help-text">可以是单个Excel文件路径或包含多个Excel文件的目录路径</div>
+                </div>
+                <button type="submit">生成XML</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="flutter" class="tab-content">
+        <div class="section">
+            <h2>导出Excel</h2>
+            <form action="/export_excel_flutter" method="post">
+                <div class="form-group">
+                    <label>项目根路径：</label>
+                    <input type="text" name="project_path" placeholder="例如：D:\flutter_project" required>
+                    <div class="help-text">Flutter项目根目录，包含lib/l10n目录</div>
+                </div>
+                <div class="form-group">
+                    <label>Excel输出路径：</label>
+                    <input type="text" name="output_path" placeholder="例如：D:\flutter_project\output\translations.xlsx"
+                        required>
+                    <div class="help-text">Excel文件的完整输出路径</div>
+                </div>
+                <button type="submit">导出Excel</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>导入ARB</h2>
+            <form action="/export_arb" method="post">
+                <div class="form-group">
+                    <label>项目根路径：</label>
+                    <input type="text" name="project_path" placeholder="例如：D:\flutter_project" required>
+                    <div class="help-text">Flutter项目根目录，包含lib/l10n目录</div>
+                </div>
+                <div class="form-group">
+                    <label>Excel文件路径：</label>
+                    <input type="text" name="excel_path" placeholder="例如：D:\flutter_project\output\translations.xlsx"
+                        required>
+                    <div class="help-text">包含翻译内容的Excel文件路径</div>
+                </div>
+                <button type="submit">生成ARB</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // 隐藏所有内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            // 取消所有标签页的激活状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 显示选中的内容
+            document.getElementById(tabId).classList.add('active');
+            // 激活选中的标签页
+            document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
