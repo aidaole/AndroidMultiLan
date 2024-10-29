@@ -128,3 +128,10 @@ AndroidMultiLanTest
 
 ![](images/README/2024-10-29-22-35-47.png ':size=300')
 
+# 对Flutter的支持
+
+其实这个工具还适配了flutter项目的多语言导出和导入, 使用方法类似于android, 只不过需要导出`arb`文件, 然后导入`arb`文件
+
+依然是填写flutter项目的根目录, 会自动识别flutter项目中 `lib/l10n` 目录下的所有 `arb` 文件, 并导出为excel, 当然你flutter的多语言方案必须使用 `flutter_localizations` 的方案
+
+这里就不多做介绍, 可以自行尝试
