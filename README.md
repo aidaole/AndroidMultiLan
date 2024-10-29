@@ -92,4 +92,39 @@ Press CTRL+C to quit
 2. 导出时支持填写flavor名称, 默认读取跟`main`同级的flavor目录
 3. 导出时按照原xml中顺序按key覆盖对应value, 不是以excel中的顺序覆盖, 最大程度上避免git diff出来行对不上的问题
 
+### 使用实例
+
+例如我有一个android项目, 目录和module如下:
+
+```
+AndroidMultiLanTest
+    |--app
+        |--values
+            |--strings.xml
+        |--values-en-US
+            |--strings.xml
+        |--values-de-DE
+            |--strings.xml
+    |--lib_account
+        |--values
+            |--strings.xml
+        |--values-en-US
+            |--strings.xml
+    |--modules
+        |--lib_test_2
+            |--values
+                |--strings.xml
+                    |--values-en-US
+            |--strings.xml
+```
+
+![](images/README/2024-10-29-22-36-58.png ':size=300')
+
+导出excel后的效果如下:
+
+![](images/README/2024-10-29-22-34-15.png ':size=300')
+
+将excel中的文本修改之后, 反向生成xml, 查看git diff:
+
+![](images/README/2024-10-29-22-35-47.png ':size=300')
 
